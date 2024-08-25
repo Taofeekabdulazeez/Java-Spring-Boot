@@ -13,7 +13,7 @@ import java.util.List;
 public class StudentDaoImpl implements  StudentDao{
 
     // define field for entity manager
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     // inject entity manager using constructor injection
     @Autowired
@@ -40,6 +40,41 @@ public class StudentDaoImpl implements  StudentDao{
 
         // return query results
         return query.getResultList();
+    }
+
+    @Override
+    public List<Student> findByLastName(String lastName) {
+        // create query
+        TypedQuery<Student> query = this.entityManager.createQuery("FROM Student WHERE lastName=:lastName", Student.class);
+
+        // set query parameters
+        query.setParameter("lastName", lastName);
+
+        // return query results
+        return query.getResultList();
+    }
+
+    @Override
+    @Transactional
+    public void update(Student student) {
+        this.entityManager.merge(student);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Integer id) {
+        // find the student by the id
+        //Student student = this.findById(id);
+        Student student = this.entityManager.find(Student.class, id);
+
+        // delete the student
+        this.entityManager.remove(student);
+    }
+
+    @Override
+    @Transactional
+    public int deleteAll() {
+        return this.entityManager.createQuery("DELETE FROM Student").executeUpdate();
     }
 
 
