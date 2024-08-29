@@ -1,12 +1,24 @@
-package com.example.demo.entity;
+package com.sirfeeky.cruddemo.entity;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "employee")
-public class Employee {
-    // define fields
+@Table(name = "instructor")
+public class Instructor {
+    // annotate the class as an entity and map to db table
+
+    // define the fields
+
+    // annotate the fields with db column names
+
+    // ** set up mapping to InstructorDetail entity
+
+    // create constructors
+
+    // generate getter/setter methods
+
+    // generate toString() method
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,21 +30,21 @@ public class Employee {
     @Column(name = "last_name")
     private String lastName;
 
-
     @Column(name = "email")
     private String email;
 
-    // define constructors
-    public Employee() {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "instructor_detail_id")
+    private InstructorDetail instructorDetail;
+
+    public Instructor() {
     }
 
-    public Employee(String firstName, String lastName, String email) {
+    public Instructor(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
     }
-
-    // define setters and getters
 
     public int getId() {
         return id;
@@ -43,7 +55,6 @@ public class Employee {
     }
 
     public String getFirstName() {
-        
         return firstName;
     }
 
@@ -67,14 +78,22 @@ public class Employee {
         this.email = email;
     }
 
-    // define toString method
+    public InstructorDetail getInstructorDetail() {
+        return instructorDetail;
+    }
+
+    public void setInstructorDetail(InstructorDetail instructorDetail) {
+        this.instructorDetail = instructorDetail;
+    }
+
     @Override
     public String toString() {
-        return "Employee{" +
+        return "Instructor{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", instructorDetail=" + instructorDetail +
                 '}';
     }
 }
