@@ -4,6 +4,7 @@ import com.sirfeeky.cruddemo.dao.AppDAO;
 import com.sirfeeky.cruddemo.entity.Course;
 import com.sirfeeky.cruddemo.entity.Instructor;
 import com.sirfeeky.cruddemo.entity.InstructorDetail;
+import com.sirfeeky.cruddemo.entity.Review;
 
 import java.util.List;
 
@@ -22,20 +23,41 @@ public class CruddemoApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(AppDAO appDAO){
 		return runner -> {
-			// createInstructor(appDAO);
-			// findInstructor(appDAO);
-			// deleteInstructor(appDAO);
-			// findInstructorDetail(appDAO);
-			// deleteInstructorDetail(appDAO);
-			// createInstructorWithCourses(appDAO);
-			// findInstructorWithCourses(appDAO);
-			// findCoursesforInstructor(appDAO);
-			// findInstructorWithCoursesJoinFetch(appDAO);
-			// updateInstructor(appDAO);
-			// updateCourse(appDAO);
-			// deleteInstructor(appDAO);
-			deleteCourse(appDAO);
+			// createCourseAndReviews(appDAO);
+			// retrieveCourseAndReviews(appDAO);
+			deleteCourseAndReviews(appDAO);
 		};
+	}
+
+	private void deleteCourseAndReviews(AppDAO appDAO) {
+		int id = 10;
+		// this will delete the associated reviews
+		appDAO.deleteCourseById(id);
+	}
+
+	private void retrieveCourseAndReviews(AppDAO appDAO) {
+		// get the course and reviews
+		int id = 10;
+		Course course = appDAO.findCourseAndReviewsByCourseId(id);
+
+		// print the course
+		System.out.println("Course: "+course);
+
+		// print associated reviews
+		System.out.println("Associated Reviews: "+course.getReviews());
+	}
+
+	private void createCourseAndReviews(AppDAO appDAO) {
+		// create a course
+		Course course = new Course("Compiler Construction");
+
+		// add some reviews
+		course.addReview(new Review("Great course, love it"));
+		course.addReview(new Review("This is my best course ever!"));
+		course.addReview(new Review("Damn! You made me love compiler construction"));
+
+		// save the course ... (automatically saved the associated reviews)
+		appDAO.save(course);
 	}
 
 	private void deleteCourse(AppDAO appDAO) {
